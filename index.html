@@ -3,193 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veteran Resources in Wake County, NC</title>
+    <title>Veteran Resources - Wake County, NC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            color: #333;
+        :root {
+            --primary: #0056b3;
+            --secondary: #e63946;
+            --accent: #ff914d;
+            --light: #f8f9fa;
+            --dark: #212529;
         }
-        h1 {
-            color: #0066cc;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), #003366);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .search-bar {
+            padding: 1rem;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 0.5rem 1rem;
+            background: white;
+            gap: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .tab {
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        .resource-section {
+            display: none;
+            padding: 1rem 0;
+        }
+        .resource-section.active {
+            display: block;
+        }
+        .resource-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .resource-card:active {
+            transform: scale(0.98);
+        }
+        .resource-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        .resource-card p {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+        .contact-info {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 0.8rem;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .contact-item i {
+            margin-right: 0.8rem;
+            color: var(--primary);
+            width: 20px;
             text-align: center;
         }
-        h2 {
-            color: #004080;
-            border-bottom: 2px solid #004080;
-            padding-bottom: 5px;
+        .benefit-tag {
+            display: inline-block;
+            background: #e3f2fd;
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
         }
-        .resource {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #0066cc;
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--dark);
+            color: white;
+            font-size: 0.9rem;
         }
-        .resource h3 {
-            margin-top: 0;
-            color: #0066cc;
+        .footer img {
+            width: 30px;
+            vertical-align: middle;
+            margin-right: 5px;
         }
-        .contact {
-            font-weight: bold;
-            margin: 5px 0;
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-decoration: none;
+            font-size: 1.5rem;
+            z-index: 99;
         }
-        .benefit {
-            font-style: italic;
-            color: #555;
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Veteran Resources in Wake County, North Carolina</h1>
-    
-    <h2>Healthcare & Mental Health Services</h2>
-    
-    <div class="resource">
-        <h3>NC State Veterans Home - Raleigh</h3>
-        <p><strong>Description:</strong> State-run facility providing long-term care for veterans, including skilled nursing and rehabilitation services.</p>
-        <p class="contact">Location: 924 NE 7th St, Raleigh, NC 27607</p>
-        <p class="contact">Phone: (919) 733-6400</p>
-        <p class="benefit">Benefit: Priority admission for veterans with service-connected disabilities.</p>
+    <header>
+        <div class="container">
+            <h1>Veteran Resources</h1>
+            <p>Wake County, North Carolina</p>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <div class="container">
+            <input type="text" id="searchInput" placeholder="Search resources..." aria-label="Search resources">
+        </div>
     </div>
-    
-    <div class="resource">
-        <h3>Hope for the Warriors</h3>
-        <p><strong>Description:</strong> National nonprofit providing comprehensive support programs for combat-wounded service members, veterans, and military families.</p>
-        <p class="contact">Website: <a href="https://www.hopeforthewarriors.org" target="_blank">hopeforthewarriors.org</a></p>
-        <p class="contact">Phone: (877) 246-7349</p>
-        <p class="benefit">Benefit: Free mental health counseling, career transition support, and wellness programs.</p>
+
+    <div class="category-tabs">
+        <div class="tab active" data-category="healthcare">Healthcare</div>
+        <div class="tab" data-category="education">Education</div>
+        <div class="tab" data-category="business">Business</div>
+        <div class="tab" data-category="financial">Financial</div>
+        <div class="tab" data-category="community">Community</div>
+        <div class="tab" data-category="other">Other</div>
     </div>
-    
-    <div class="resource">
-        <h3>Project Odyssey (Wounded Warrior Project)</h3>
-        <p><strong>Description:</strong> Outdoor adventure-based programs designed to help warriors manage and overcome combat stress and PTSD.</p>
-        <p class="contact">Website: <a href="https://www.woundedwarriorproject.org" target="_blank">woundedwarriorproject.org</a></p>
-        <p class="contact">Phone: (904) 296-7350</p>
-        <p class="benefit">Benefit: Free adventure-based therapy programs and peer support networks.</p>
+
+    <div class="container">
+        <!-- Healthcare Section -->
+        <div class="resource-section active" id="healthcare">
+            <div class="resource-card">
+                <h3>NC State Veterans Home - Raleigh</h3>
+                <p>State-run facility providing long-term care for veterans, including skilled nursing and rehabilitation services.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>924 NE 7th St, Raleigh, NC 27607</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 733-6400</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Priority admission for service-connected disabilities</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>Hope for the Warriors</h3>
+                <p>National nonprofit providing comprehensive support programs for combat-wounded service members.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.hopeforthewarriors.org" target="_blank">hopeforthewarriors.org</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(877) 246-7349</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Free mental health counseling & career support</span>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="resource-section" id="education">
+            <div class="resource-card">
+                <h3>Wake Technical Community College</h3>
+                <p>Dedicated support for veterans using GI Bill® benefits, including priority registration and counseling.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>9101 Fayetteville Rd, Raleigh, NC 27603</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 866-5000</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.waketech.edu" target="_blank">waketech.edu</a></span>
+                    </div>
+                </div>
+                <span class="benefit-tag">In-state tuition regardless of residency</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>NC State University Military Services</h3>
+                <p>Comprehensive support for veteran students including benefits processing and career services.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>2221 Dunn Ave, Raleigh, NC 27607</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 515-3048</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://dasa.ncsu.edu/veterans/" target="_blank">dasa.ncsu.edu/veterans/</a></span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Priority course registration</span>
+            </div>
+        </div>
+
+        <!-- Business Section -->
+        <div class="resource-section" id="business">
+            <div class="resource-card">
+                <h3>Carolina Small Business Development Fund</h3>
+                <p>Provides loans and business development services with special programs for veteran-owned businesses.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>109 E. Jones St., Raleigh, NC 27601</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 803-1437</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.carolinasmallbusiness.org" target="_blank">carolinasmallbusiness.org</a></span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Special loan programs with reduced rates</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>Veterans Business Outreach Center</h3>
+                <p>Entrepreneurial development services including business training and mentorship.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>2 E. South St., Raleigh, NC 27601</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 715-0492</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.ncsbc.net/vboc" target="_blank">ncsbc.net/vboc</a></span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Free business plan workshops</span>
+            </div>
+        </div>
+
+        <!-- Financial Section -->
+        <div class="resource-section" id="financial">
+            <div class="resource-card">
+                <h3>NC Veterans Legal Assistance</h3>
+                <p>Pro bono legal services for veterans facing issues with benefits, housing, or family law.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 463-2061</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.ncveteranslegal.org" target="_blank">ncveteranslegal.org</a></span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Free legal representation for VA appeals</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>Operation Homefront</h3>
+                <p>Provides critical financial assistance, transitional housing, and family support programs.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.operationhomefront.org" target="_blank">operationhomefront.org</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(800) 722-6098</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Emergency financial grants available</span>
+            </div>
+        </div>
+
+        <!-- Community Section -->
+        <div class="resource-section" id="community">
+            <div class="resource-card">
+                <h3>Team Red, White & Blue</h3>
+                <p>Connects veterans through physical and social activities to combat isolation.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.teamrwb.org" target="_blank">teamrwb.org</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>raleigh@teamrwb.org</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Free fitness events & community engagement</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>VFW Post 7383</h3>
+                <p>Local chapter offering camaraderie, advocacy, and assistance with VA claims.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>5220 Apex Hwy, Raleigh, NC 27607</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 231-4170</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Free claims assistance</span>
+            </div>
+        </div>
+
+        <!-- Other Section -->
+        <div class="resource-section" id="other">
+            <div class="resource-card">
+                <h3>Wake County Veterans Services</h3>
+                <p>County agency assisting with benefits claims, property tax relief, and emergency assistance.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>220 Swinburne St, Raleigh, NC 27610</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 856-6060</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">Local emergency funds available</span>
+            </div>
+
+            <div class="resource-card">
+                <h3>NC Division of Veterans Affairs</h3>
+                <p>State agency providing benefits counseling, advocacy, and outreach programs.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><a href="https://www.milvets.nc.gov" target="_blank">milvets.nc.gov</a></span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>(919) 814-5440</span>
+                    </div>
+                </div>
+                <span class="benefit-tag">State-specific benefits assistance</span>
+            </div>
+        </div>
     </div>
-    
-    <h2>Education & Training</h2>
-    
-    <div class="resource">
-        <h3>Wake Technical Community College - Veterans Services</h3>
-        <p><strong>Description:</strong> Dedicated support for veterans using GI Bill® benefits, including priority registration and academic counseling.</p>
-        <p class="contact">Location: 9101 Fayetteville Rd, Raleigh, NC 27603</p>
-        <p class="contact">Phone: (919) 866-5000</p>
-        <p class="contact">Website: <a href="https://www.waketech.edu" target="_blank">waketech.edu</a></p>
-        <p class="benefit">Benefit: In-state tuition regardless of residency status, veteran-specific scholarships.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>NC State University - Military and Veteran Services</h3>
-        <p><strong>Description:</strong> Comprehensive support for veteran students including benefits processing, academic advising, and career services.</p>
-        <p class="contact">Location: 2221 Dunn Ave, Raleigh, NC 27607</p>
-        <p class="contact">Phone: (919) 515-3048</p>
-        <p class="contact">Website: <a href="https://dasa.ncsu.edu/veterans/" target="_blank">dasa.ncsu.edu/veterans/</a></p>
-        <p class="benefit">Benefit: Priority course registration, veteran-specific orientation, and networking events.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>VetFran (Franchise Opportunities)</h3>
-        <p><strong>Description:</strong> Program connecting veterans with franchise ownership opportunities through discounts and mentorship.</p>
-        <p class="contact">Website: <a href="https://www.vetfran.com" target="_blank">vetfran.com</a></p>
-        <p class="contact">Phone: (312) 673-3969</p>
-        <p class="benefit">Benefit: Discounted franchise fees (up to 50% off) and special financing options.</p>
-    </div>
-    
-    <h2>Business & Employment</h2>
-    
-    <div class="resource">
-        <h3>Carolina Small Business Development Fund</h3>
-        <p><strong>Description:</strong> Provides loans and business development services with special programs for veteran-owned businesses.</p>
-        <p class="contact">Location: 109 E. Jones St., Raleigh, NC 27601</p>
-        <p class="contact">Phone: (919) 803-1437</p>
-        <p class="contact">Website: <a href="https://www.carolinasmallbusiness.org" target="_blank">carolinasmallbusiness.org</a></p>
-        <p class="benefit">Benefit: Special loan programs with reduced rates for veterans and military spouses.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>Veterans Business Outreach Center (VBOC)</h3>
-        <p><strong>Description:</strong> Offers entrepreneurial development services including business training, counseling, and mentorship.</p>
-        <p class="contact">Location: 2 E. South St., Raleigh, NC 27601</p>
-        <p class="contact">Phone: (919) 715-0492</p>
-        <p class="contact">Website: <a href="https://www.ncsbc.net/vboc" target="_blank">ncsbc.net/vboc</a></p>
-        <p class="benefit">Benefit: Free business plan workshops and one-on-one counseling sessions.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>Hiring Our Heroes (US Chamber of Commerce)</h3>
-        <p><strong>Description:</strong> Nationwide program helping veterans, transitioning service members, and military spouses find meaningful employment.</p>
-        <p class="contact">Website: <a href="https://www.hiringourheroes.org" target="_blank">hiringourheroes.org</a></p>
-        <p class="contact">Local Contact: (919) 664-7000</p>
-        <p class="benefit">Benefit: Free access to job fairs, resume workshops, and corporate fellowship programs.</p>
-    </div>
-    
-    <h2>Financial & Legal Assistance</h2>
-    
-    <div class="resource">
-        <h3>North Carolina Veterans Legal Assistance</h3>
-        <p><strong>Description:</strong> Pro bono legal services for veterans facing issues with benefits, housing, or family law.</p>
-        <p class="contact">Phone: (919) 463-2061</p>
-        <p class="contact">Website: <a href="https://www.ncveteranslegal.org" target="_blank">ncveteranslegal.org</a></p>
-        <p class="benefit">Benefit: Free legal representation for VA benefits appeals and discharge upgrades.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>Operation Homefront</h3>
-        <p><strong>Description:</strong> Provides critical financial assistance, transitional housing, and family support programs.</p>
-        <p class="contact">Website: <a href="https://www.operationhomefront.org" target="_blank">operationhomefront.org</a></p>
-        <p class="contact">Phone: (800) 722-6098</p>
-        <p class="benefit">Benefit: Emergency financial grants for rent/mortgage, utilities, and car repairs.</p>
-    </div>
-    
-    <h2>Community & Recreation</h2>
-    
-    <div class="resource">
-        <h3>Team Red, White & Blue (Raleigh Chapter)</h3>
-        <p><strong>Description:</strong> Organization connecting veterans through physical and social activities to combat isolation.</p>
-        <p class="contact">Website: <a href="https://www.teamrwb.org" target="_blank">teamrwb.org</a></p>
-        <p class="contact">Local Contact: raleigh@teamrwb.org</p>
-        <p class="benefit">Benefit: Free fitness events, team sports, and community engagement opportunities.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>Veterans of Foreign Wars (VFW) Post 7383</h3>
-        <p><strong>Description:</strong> Local chapter offering camaraderie, advocacy, and assistance with VA claims.</p>
-        <p class="contact">Location: 5220 Apex Hwy, Raleigh, NC 27607</p>
-        <p class="contact">Phone: (919) 231-4170</p>
-        <p class="benefit">Benefit: Free claims assistance and access to veteran-only social events.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>Parks and Recreation Discounts</h3>
-        <p><strong>Description:</strong> Wake County parks offer discounted or free access to veterans for facilities and programs.</p>
-        <p class="contact">Website: <a href="https://www.wakegov.com/departments-government/parks-recreation-open-space" target="_blank">wakegov.com/parks</a></p>
-        <p class="contact">Phone: (919) 996-3285</p>
-        <p class="benefit">Benefit: 50% discount on annual passes and program fees at county parks.</p>
-    </div>
-    
-    <h2>Additional Resources</h2>
-    
-    <div class="resource">
-        <h3>Wake County Veterans Services Office</h3>
-        <p><strong>Description:</strong> County agency assisting with benefits claims, property tax relief, and emergency assistance.</p>
-        <p class="contact">Location: 220 Swinburne St, Raleigh, NC 27610</p>
-        <p class="contact">Phone: (919) 856-6060</p>
-        <p class="benefit">Benefit: Free assistance with VA claims and access to local emergency funds.</p>
-    </div>
-    
-    <div class="resource">
-        <h3>North Carolina Division of Veterans Affairs</h3>
-        <p><strong>Description:</strong> State agency providing benefits counseling, advocacy, and outreach programs.</p>
-        <p class="contact">Website: <a href="https://www.milvets.nc.gov" target="_blank">milvets.nc.gov</a></p>
-        <p class="contact">Phone: (919) 814-5440</p>
-        <p class="benefit">Benefit: Free assistance with state-specific benefits including education and tax exemptions.</p>
-    </div>
-    
-    <footer>
-        <p><strong>Note:</strong> Always verify eligibility requirements with each organization. Many programs require DD214 documentation.</p>
-        <p><strong>Thank you for your service!</strong> 🇺🇸</p>
+
+    <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+    <footer class="footer">
+        <div class="container">
+            <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Flag_of_the_United_States.svg/125px-Flag_of_the_United_States.svg.png" alt="US Flag"> Thank you for your service!</p>
+            <p>Always verify eligibility requirements with each organization.</p>
+        </div>
     </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and sections
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.resource-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding section
+                tab.classList.add('active');
+                const category = tab.getAttribute('data-category');
+                document.getElementById(category).classList.add('active');
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const cards = document.querySelectorAll('.resource-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Back to top button
+        window.addEventListener('scroll', () => {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'flex';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
