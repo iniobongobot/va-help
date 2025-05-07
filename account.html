@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VETS CONNECT - Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>VETS CONNECT</h1>
+    </div>
+
+    <div class="welcome-bar">
+        <div class="location-info" id="locationDisplay">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Loading location...</span>
+        </div>
+        <div class="user-info">
+            Welcome, <strong id="username">Guest</strong>
+        </div>
+    </div>
+
+    <div class="section-title">Your Account</div>
+    <div class="resource-card">
+        <h3>Profile Information</h3>
+        <div id="account-info"></div>
+        <button id="login-btn" class="benefit-tag" style="margin-top: 1rem;">Sign In with ID.me</button>
+    </div>
+
+    <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+    <div class="footer-nav">
+        <div class="nav-item" onclick="window.location.href='index.html'">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="window.location.href='bookmarks.html'">
+            <i class="fas fa-bookmark"></i>
+            <span>Bookmarks</span>
+        </div>
+        <div class="nav-item" onclick="window.location.href='alerts.html'">
+            <i class="fas fa-bell"></i>
+            <span>Alerts</span>
+        </div>
+        <div class="nav-item" onclick="window.location.href='account.html'">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/account.js"></script>
+</body>
+</html>

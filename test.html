@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veteran Benefits Navigator</title>
+<style>
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+margin: 0;
+background: #e9eef2;
+color: #333;
+}
+header {
+background: #003366;
+color: white;
+padding: 1.5em;
+text-align: center;
+}
+header h1 {
+margin: 0;
+font-size: 2em;
+}
+main {
+padding: 2em;
+max-width: 1000px;
+margin: auto;
+}
+section {
+background: white;
+margin-bottom: 2em;
+padding: 2em;
+border-radius: 10px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+button {
+background: #0055a5;
+color: white;
+border: none;
+padding: 10px 20px;
+font-size: 1em;
+border-radius: 5px;
+cursor: pointer;
+margin-top: 10px;
+}
+button:hover {
+background: #004080;
+}
+input, textarea {
+width: 100%;
+padding: 10px;
+margin-top: 5px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+.location-result, .discount-item {
+background: #f1f4f8;
+padding: 15px;
+margin-top: 10px;
+border-radius: 5px;
+}
+#chatbox {
+margin-top: 20px;
+padding: 15px;
+background: #eef2f6;
+border-radius: 8px;
+}
+.chat {
+margin-bottom: 10px;
+}
+.chat.bot {
+font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Veteran Benefits Navigator</h1>
+<p>Connecting Veterans to Benefits, Services, and Support</p>
+</header>
+
+<main>
+
+<!-- Location and Services Section -->
+<section>
+<h2>Find VA Services Near You</h2>
+<button onclick="findLocation()">Find My Location</button>
+<p id="location"></p>
+<div id="nearbyServices"></div>
+</section>
+
+<!-- Discounts and Freebies Section -->
+<section>
+<h2>Veteran Discounts & Freebies</h2>
+<div id="discountList"></div>
+</section>
+
+<!-- Application Form Section -->
+<section>
+<h2>Apply for Benefits</h2>
+<form id="applyForm">
+<label for="name">Full Name:</label>
+<input type="text" id="name" name="name" required>
+
+<label for="branch">Branch of Service:</label>
+<input type="text" id="branch" name="branch" required>
+
+<label for="benefit">Benefit You Want to Apply For:</label>
+<textarea id="benefit" name="benefit" rows="3" required></textarea>
+
+<button type="submit">Submit Application</button>
+</form>
+<p id="submitMessage"></p>
+</section>
+
+<!-- AI Assistant Section -->
+<section>
+<h2>Ask the VA Assistant</h2>
+<div id="chatbox"></div>
+<input type="text" id="userInput" placeholder="Ask a question..." onkeypress="handleKeyPress(event)">
+<button onclick="sendMessage()">Send</button>
+</section>
+
+</main>
+
+<script>
+// Mock VA Locations
+const mockVALocations = [
+{ name: "Raleigh VA Clinic", latitude: 35.7974, longitude: -78.6382, type: "Clinic" },
+{ name: "Durham VA Medical Center", latitude: 36.0056, longitude: -78.9382, type: "Hospital" },
+{ name: "Fayetteville VA Medical Center", latitude: 35.0498, longitude: -78.8784, type: "Hospital" }
+];
+
+// Mock Discounts
+const veteranDiscounts = [
+{ name: "Home Depot", description: "10% discount for all veterans year-round with proof of service." },
+{ name: "Lowe's", description: "10% off on eligible purchases for veterans every day." },
+{ name: "Apple", description: "Exclusive pricing for veterans and active military on Apple products." },
+{ name: "Amtrak", description: "10% discount for veterans on train fares nationwide." },
+{ name: "National Parks", description: "Free lifetime America the Beautiful Pass for veterans." }
+];
+
+// Haversine formula
+function getDistance(lat1, lon1, lat2, lon2) {
+const toRad = (value) => value * Math.PI / 180;
+const R = 6371;
+const dLat = toRad(lat2 - lat1);
+const dLon = toRad(lon2 - lon1);
+const a =
+Math.sin(dLat/2) * Math.sin(dLat/2) +
+Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+Math.sin(dLon/2) * Math.sin(dLon/2);
+const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+return R * c;
+}
+
+// Find Location
+function findLocation() {
+if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(showPosition, showError);
+} else {
+document.getElementById("location").innerText = "Geolocation not supported.";
+}
+}
+
+function showPosition(position) {
+const userLat = position.coords.latitude;
+const userLon = position.coords.longitude;
+document.getElementById("location").innerText = `Your Location: Latitude ${userLat.toFixed(4)}, Longitude ${userLon.toFixed(4)}`;
+
+let nearby = mockVALocations.filter(place => {
+let distance = getDistance(userLat, userLon, place.latitude, place.longitude);
+return distance <= 100;
+});
+
+let output = "<h3>Nearby VA Services:</h3>";
+if (nearby.length === 0) {
+output += "<p>No VA services found nearby.</p>";
+} else {
+nearby.forEach(place => {
+output += `<div class="location-result">
+<strong>${place.name}</strong><br>
+Type: ${place.type}
+</div>`;
+});
+}
+document.getElementById("nearbyServices").innerHTML = output;
+}
+
+function showError(error) {
+document.getElementById("location").innerText = "Error finding location.";
+}
+
+// Load Discounts List
+function loadDiscounts() {
+let output = "<h3>Available Discounts:</h3>";
+veteranDiscounts.forEach(discount => {
+output += `<div class="discount-item">
+<strong>${discount.name}</strong><br>
+${discount.description}
+</div>`;
+});
+document.getElementById("discountList").innerHTML = output;
+}
+
+// Application Form
+document.getElementById("applyForm").addEventListener("submit", function(event) {
+event.preventDefault();
+document.getElementById("submitMessage").innerText = "Application submitted successfully. Thank you for your service!";
+document.getElementById("applyForm").reset();
+});
+
+// AI Assistant
+function sendMessage() {
+const userInput = document.getElementById("userInput").value.trim();
+if (userInput === "") return;
+
+addChat("You: " + userInput, "user");
+
+let botReply = getBotReply(userInput);
+setTimeout(() => {
+addChat("VA Assistant: " + botReply, "bot");
+}, 600);
+
+document.getElementById("userInput").value = "";
+}
+
+function addChat(message, type) {
+const chatbox = document.getElementById("chatbox");
+let chatMessage = document.createElement("div");
+chatMessage.className = "chat " + type;
+chatMessage.innerText = message;
+chatbox.appendChild(chatMessage);
+chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+function getBotReply(userInput) {
+userInput = userInput.toLowerCase();
+if (userInput.includes("health") || userInput.includes("hospital")) {
+return "You can visit your nearest VA hospital for health services.";
+} else if (userInput.includes("apply") || userInput.includes("benefit")) {
+return "You can apply directly using the form above. We will help process it.";
+} else if (userInput.includes("housing")) {
+return "Housing assistance is available through HUD-VASH programs at many VA locations.";
+} else if (userInput.includes("education")) {
+return "You may be eligible for the GI Bill and other education benefits.";
+} else if (userInput.includes("discount") || userInput.includes("freebie")) {
+return "You can view available discounts and freebies in the Discounts section!";
+} else {
+return "I'm here to assist. Please contact your nearest VA center for more detailed help.";
+}
+}
+
+// Allow Enter Key
+function handleKeyPress(event) {
+if (event.key === "Enter") {
+sendMessage();
+}
+}
+
+// Load discounts automatically on page load
+window.onload = function() {
+loadDiscounts();
+};
+</script>
+
+</body>
+</html>
